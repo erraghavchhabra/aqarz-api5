@@ -1,0 +1,13 @@
+{
+  "applinks": {
+    "apps": [],
+    "details": [
+      {
+        "appID": "X59HVMUMYF.sa.aqarz",
+        "paths": [
+          "/estate/*/show"
+        ]
+      }
+    ]
+  }
+}

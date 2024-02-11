@@ -1,0 +1,19 @@
+{
+  "applinks": {
+    "apps": [],
+
+
+    "details": [
+      {
+        "appID": "7G5546WXMH.sa.aqarz",
+        "paths": [ "/estate/*/show", "fund/request/*/show","/*" ]
+      }
+    ]
+
+
+
+
+  }
+}
+
+

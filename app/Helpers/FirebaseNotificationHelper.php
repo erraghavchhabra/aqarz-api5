@@ -1,0 +1,54 @@
+<?php
+namespace App\Helpers;
+
+use FCM;
+use LaravelFCM\Message\OptionsBuilder;
+use LaravelFCM\Message\PayloadDataBuilder;
+use LaravelFCM\Message\PayloadNotificationBuilder;
+use Log;
+
+class FirebaseNotificationHelper
+{
+    //Send Notification
+    public function sendDownstreamMessage($title, $message, $token)
+    {
+        $optionBuilder = new OptionsBuilder();
+        $optionBuilder->setTimeToLive(60 * 20);
+
+        $notificationBuilder = new PayloadNotificationBuilder($title);
+        $notificationBuilder->setBody($message)
+            ->setSound('default');
+
+        $dataBuilder = new PayloadDataBuilder();
+        $dataBuilder->addData(['a_data' => 'my_data']);
+
+        $option       = $optionBuilder->build();
+        $notification = $notificationBuilder->build();
+        $data         = $dataBuilder->build();
+
+        $token = $token;
+
+        $downstreamResponse = FCM::sendTo($token, $option, $notification, $data);
+
+        $success = $downstreamResponse->numberSuccess();
+        $fail    = $downstreamResponse->numberFailure();
+        $downstreamResponse->numberModification();
+        if ($fail) {
+            Log::channel('single')->info("Failed To Send Notification To " . $token);
+            return null;
+        }
+        return 1;
+
+        // // return Array - you must remove all this tokens in your database
+        // $downstreamResponse->tokensToDelete();
+
+        // // return Array (key : oldToken, value : new token - you must change the token in your database)
+        // $downstreamResponse->tokensToModify();
+
+        // // return Array - you should try to resend the message to the tokens in the array
+        // $downstreamResponse->tokensToRetry();
+
+        // // return Array (key:token, value:error) - in production you should remove from your database the tokens
+        // $downstreamResponse->tokensWithError();
+    }
+}
